@@ -10,5 +10,4 @@ class Car(models.Model):
     price = models.FloatField(blank=True, null=True)
 
     def __str__(self):
-        return self.model
-
+        return f"{self.model} ({self.pk})"
