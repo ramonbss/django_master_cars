@@ -18,6 +18,7 @@ class Car(models.Model):
     factory_year = models.IntegerField(blank=True, null=True)
     model_year = models.IntegerField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
+    photo = models.ImageField(upload_to='cars', blank=True, null=True)
 
     def __str__(self):
         return f"{self.model} ({self.pk})"
