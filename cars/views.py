@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
 from .models import Car
-from cars.forms import CarForm
+from cars.forms import CarFormModel
 
 # Create your views here.
 def cars(request):
@@ -38,11 +38,11 @@ def _get_car_photo_url(car):
 
 def new_car(request):
     if request.method == 'POST':
-        new_car_form = CarForm(request.POST, request.FILES)
+        new_car_form = CarFormModel(request.POST, request.FILES)
         print(new_car_form.data)
         if new_car_form.is_valid():
            new_car_form.save()
            return redirect('cars_list')
     else:
-        new_car_form = CarForm()
+        new_car_form = CarFormModel()
     return render(request, 'new_car.html', context={'new_car_form': new_car_form})
