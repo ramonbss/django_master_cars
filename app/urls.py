@@ -19,9 +19,11 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from cars import views
+from accounts import views as register_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('cars/', views.cars, name='cars_list'),
+    path('cars/', views.cars, name='cars_list'),    
     path('new_car', views.new_car, name='new_car'),
+    path('register/', register_views.register, name='register'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
