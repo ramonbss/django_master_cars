@@ -17,15 +17,12 @@ def register(request):
 
 def login(request):
     if request.method == "POST":
-        print("1")
         auth_form = AuthenticationForm(data=request.POST)
         if auth_form.is_valid():
             username = auth_form.cleaned_data.get("username")
             password = auth_form.cleaned_data.get("password")
-            print("2")
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                print("3")
                 auth_login(request, user)
                 return redirect("cars_list")
             else:
