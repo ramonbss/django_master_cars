@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from .models import Car
 from cars.forms import CarFormModel
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 
 
@@ -73,3 +73,10 @@ class CarDetailView(DetailView):
 
         # Fallback to placeholder - uses settings for flexibility
         return f"{settings.MEDIA_URL}cars/car_placeholder.webp"
+
+
+class CarUpdateView(UpdateView):
+    model = Car
+    form_class = CarFormModel
+    template_name = "car_update.html"
+    success_url = reverse_lazy("cars_list")
