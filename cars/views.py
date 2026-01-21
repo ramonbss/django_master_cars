@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.urls import reverse_lazy
 from .models import Car
 from cars.forms import CarFormModel
 from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
 
 
 class CarListView(ListView):
@@ -38,13 +40,9 @@ class CarListView(ListView):
         return f"{settings.MEDIA_URL}cars/car_placeholder.webp"
 
 
-def new_car(request):
-    if request.method == "POST":
-        new_car_form = CarFormModel(request.POST, request.FILES)
-        print(new_car_form.data)
-        if new_car_form.is_valid():
-            new_car_form.save()
-            return redirect("cars_list")
-    else:
-        new_car_form = CarFormModel()
-    return render(request, "new_car.html", context={"new_car_form": new_car_form})
+class CarCreateView(CreateView):
+    model = Car
+    form_class = CarFormModel
+    template_name = "new_car.html"
+    success_url = reverse_lazy("cars_list")
+    context_object_name = "new_car_form"
