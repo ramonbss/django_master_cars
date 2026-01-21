@@ -24,7 +24,7 @@ from accounts import views as register_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("cars/", views.cars, name="cars_list"),
+    path("cars/", views.CarListView.as_view(), name="cars_list"),
     path("new_car", views.new_car, name="new_car"),
     path("register/", register_views.register, name="register"),
     path("login/", register_views.login, name="login"),
