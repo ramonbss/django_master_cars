@@ -1,5 +1,7 @@
 from django.db import models
 
+from app import settings
+
 
 
 
@@ -20,6 +22,37 @@ class Car(models.Model):
     plate = models.CharField(max_length=10)
     price = models.FloatField(blank=True, null=True)
     photo = models.ImageField(upload_to='cars', blank=True, null=True)
+
+    @property
+    def photo_url(self):
+        """
+        Returns the URL for the car's photo or a placeholder
+        
+        This is a computed property that:
+        1. Returns actual photo URL if exists
+        2. Returns placeholder URL if photo is empty
+        3. Can be accessed like: car.photo_url (no parentheses needed)
+        
+        Returns:
+            str: URL to photo or placeholder image
+        """
+        if self.photo:  # Django's ImageField evaluates to False when empty
+            try:
+                return self.photo.url
+            except (ValueError, AttributeError):
+                # Edge case: photo field corrupted or file deleted from disk
+                pass
+        
+        # Return placeholder from static files
+        return f"{settings.STATIC_URL}images/car_placeholder.webp"
+    
+    @property
+    def has_photo(self):
+        """
+        Check if car has a custom photo
+        Useful for conditional rendering in templates
+        """
+        return bool(self.photo)
 
     def __str__(self):
         return f"{self.model} ({self.pk})"

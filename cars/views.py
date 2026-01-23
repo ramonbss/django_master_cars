@@ -19,26 +19,7 @@ class CarListView(ListView):
         if search:
             queryset = queryset.filter(model__icontains=search)
 
-        # Enrich each car with safe photo URL (presentation logic)
-        for car in queryset:
-            car.photo_url = self._get_car_photo_url(car)
-
         return queryset
-
-    def _get_car_photo_url(self, car):
-        """
-        Helper function to get the photo URL with fallback to placeholder.
-        Keeps presentation logic out of the model layer.
-        """
-        if car.photo and hasattr(car.photo, "url"):
-            try:
-                return car.photo.url
-            except ValueError:
-                # Photo field exists but no file is associated
-                pass
-
-        # Fallback to placeholder - uses settings for flexibility
-        return f"{settings.MEDIA_URL}cars/car_placeholder.webp"
 
 
 class CarCreateView(CreateView):
@@ -52,27 +33,6 @@ class CarCreateView(CreateView):
 class CarDetailView(DetailView):
     model = Car
     template_name = "car_detail.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        car = self.get_object()
-        context["photo_url"] = self._get_car_photo_url(car)
-        return context
-
-    def _get_car_photo_url(self, car):
-        """
-        Helper function to get the photo URL with fallback to placeholder.
-        Keeps presentation logic out of the model layer.
-        """
-        if car.photo and hasattr(car.photo, "url"):
-            try:
-                return car.photo.url
-            except ValueError:
-                # Photo field exists but no file is associated
-                pass
-
-        # Fallback to placeholder - uses settings for flexibility
-        return f"{settings.MEDIA_URL}cars/car_placeholder.webp"
 
 
 class CarUpdateView(UpdateView):
