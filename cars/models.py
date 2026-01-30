@@ -23,6 +23,7 @@ class Car(models.Model):
     plate = models.CharField(max_length=10)
     price = models.FloatField(blank=True, null=True)
     photo = models.ImageField(upload_to="cars", blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
 
     @property
     def photo_url(self):
