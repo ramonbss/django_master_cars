@@ -16,6 +16,38 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Optional: Use JSON for serialization (more secure than pickle)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# Task result expiration (1 hour)
+CELERY_RESULT_EXPIRES = 3600
+
+# Timezone (match Django timezone)
+CELERY_TIMEZONE = 'UTC'  # Or your TIME_ZONE setting
+CELERY_ENABLE_UTC = True
+
+CELERY_TASK_ROUTES = {
+    'cars.tasks.*': {'queue': 'cars'},  # Route car tasks to 'cars' queue
+    'users.tasks.*': {'queue': 'users'},
+}
+
+# Optional: Rate limiting
+CELERY_TASK_ANNOTATIONS = {
+    'cars.tasks.update_car_inventory': {
+        'rate_limit': '10/m',  # 10 per minute
+    }
+}
+
+# Optional: Task time limits
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes hard limit
+CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 minutes soft limit
+
+# Optional: Worker settings
+CELERY_WORKER_PREFETCH_MULTIPLIER = 4  # Tasks to prefetch
+CELERY_WORKER_MAX_TASKS_PER_CHILD = 1000  # Restart worker after 1000 tasks
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
