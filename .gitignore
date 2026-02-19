@@ -21,3 +21,5 @@ Thumbs.db
 .venv
 walkthroughs
 media/
+annotations/class_views
+.vscode/settings.json
