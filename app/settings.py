@@ -57,17 +57,20 @@ SECRET_KEY = "django-insecure-l!@iyn88^@@tbsk0hzo(+a3fsitv%z(=&r_%+p7q1kq6%^!ub)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 CODESPACE_NAME = os.environ.get("CODESPACE_NAME")
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", f"{CODESPACE_NAME}-8000.app.github.dev"]
+
 TRUSTED_ORIGINS = [
-    f"https://{CODESPACE_NAME}-8000.app.github.dev",
     "https://localhost:8000",
     "http://localhost:8000",
 ]
+CSRF_TRUSTED_ORIGINS = TRUSTED_ORIGINS.copy()
 ALLOWED_HOSTS.extend(TRUSTED_ORIGINS)
 if CODESPACE_NAME:
     print(f"Running in Codespace: {CODESPACE_NAME}")
-    CSRF_TRUSTED_ORIGINS = TRUSTED_ORIGINS.copy()
+    CSRF_TRUSTED_ORIGINS.append(f"https://{CODESPACE_NAME}-8000.app.github.dev")
+    ALLOWED_HOSTS.append(f"{CODESPACE_NAME}-8000.app.github.dev")
+    
 
 AWS_EC2_PUBLIC_IP = os.environ.get("EC2_PUBLIC_IP")
 if AWS_EC2_PUBLIC_IP:
