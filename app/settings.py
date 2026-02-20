@@ -17,26 +17,26 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Optional: Use JSON for serialization (more secure than pickle)
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
 
 # Task result expiration (1 hour)
 CELERY_RESULT_EXPIRES = 3600
 
 # Timezone (match Django timezone)
-CELERY_TIMEZONE = 'UTC'  # Or your TIME_ZONE setting
+CELERY_TIMEZONE = "UTC"  # Or your TIME_ZONE setting
 CELERY_ENABLE_UTC = True
 
 CELERY_TASK_ROUTES = {
-    'cars.tasks.*': {'queue': 'cars'},  # Route car tasks to 'cars' queue
-    'users.tasks.*': {'queue': 'users'},
+    "cars.tasks.*": {"queue": "cars"},  # Route car tasks to 'cars' queue
+    "users.tasks.*": {"queue": "users"},
 }
 
 # Optional: Rate limiting
 CELERY_TASK_ANNOTATIONS = {
-    'cars.tasks.update_car_inventory': {
-        'rate_limit': '10/m',  # 10 per minute
+    "cars.tasks.update_car_inventory": {
+        "rate_limit": "10/m",  # 10 per minute
     }
 }
 
@@ -69,6 +69,11 @@ if CODESPACE_NAME:
     print(f"Running in Codespace: {CODESPACE_NAME}")
     CSRF_TRUSTED_ORIGINS = TRUSTED_ORIGINS.copy()
 
+AWS_EC2_PUBLIC_IP = os.environ.get("EC2_PUBLIC_IP")
+if AWS_EC2_PUBLIC_IP:
+    print(f"Running in AWS EC2: {AWS_EC2_PUBLIC_IP}")
+    ALLOWED_HOSTS.append(AWS_EC2_PUBLIC_IP)
+    CSRF_TRUSTED_ORIGINS.append(f"http://{AWS_EC2_PUBLIC_IP}:8000")
 
 # Application definition
 INSTALLED_APPS = [
